@@ -1,2 +1,4 @@
 # Data-Proyek-Analisis
-Proyek Analisis Data DIcoding
+Proyek Analisis Data Dicoding [Bike Sharing Datasheet]
+# Run Streamlit
+streamlit run project.py
