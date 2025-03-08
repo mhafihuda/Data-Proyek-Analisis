@@ -2,4 +2,4 @@
 Proyek Analisis Data Dicoding [Bike Sharing Datasheet].  
 with Google Colab notebook and VScode
 # Run Streamlit
-streamlit run project.py
+use cmd on computer and write --> streamlit run project.py
