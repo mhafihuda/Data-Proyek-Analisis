@@ -4,4 +4,4 @@ with Google Colab notebook and VScode
 # Run Streamlit
 use cmd on computer and write --> streamlit run project.py
 # Data
-Bike-sharing-datase.zip or day.csv & hour.csv
+Bike-sharing-dataset.zip or day.csv & hour.csv
