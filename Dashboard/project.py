@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # Load dataset
 @st.cache_data
 def load_data():
-    df = pd.read_csv("day.csv")
+    df = pd.read_csv("Dashboard/day.csv")
     df["dteday"] = pd.to_datetime(df["dteday"])  # Konversi tanggal
     return df
 
