@@ -7,7 +7,7 @@ import seaborn as sns
 def load_data():
      df = pd.read_csv("Dashboard/day.csv")
      df["dteday"] = pd.to_datetime(df["dteday"])  # Konversi tanggal
-    return df
+     return df
 
 df = load_data()
 
