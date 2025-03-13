@@ -1,7 +1,15 @@
 # Data-Proyek-Analisis
-Proyek Analisis Data Dicoding [Bike Sharing Datasheet].  
-with Google Colab notebook and VScode
-# Run Streamlit
-use cmd on computer and write --> streamlit run project.py
-# Data
-Bike-sharing-dataset.zip or day.csv & hour.csv
+
+Proyek Analisis Data Decoding [Bike Sharing Datasheet] dengan Google Colab notebook dan VS Code.
+
+## Setup Virtual Environment
+
+Sebelum menjalankan proyek, pastikan kamu sudah mengatur virtual environment dan menginstal semua dependensi yang dibutuhkan.
+
+### Menggunakan Virtual Environment (venv)
+```bash
+python -m venv venv
+source venv/bin/activate  # Untuk Linux/Mac
+venv\Scripts\activate     # Untuk Windows
+pip install -r requirements.txt
+
