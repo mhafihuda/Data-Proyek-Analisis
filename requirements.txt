@@ -4,4 +4,4 @@ pandas==2.2.3
 pipreqs==0.4.13
 pytz==2025.1
 streamlit==1.43.1
-
+seaborn==0.13.2
