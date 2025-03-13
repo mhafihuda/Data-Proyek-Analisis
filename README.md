@@ -1,15 +1,25 @@
 # Data-Proyek-Analisis
 
-Proyek Analisis Data Decoding [Bike Sharing Datasheet] dengan Google Colab notebook dan VS Code.
+Proyek Analisis Data Decoding [Bike Sharing Datasheet] menggunakan Google Colab dan VS Code.
+
+## Persiapan Awal
+Sebelum memulai proyek, pastikan kamu sudah memiliki:
+- **Python** (disarankan versi 3.8 atau lebih baru)
+- **Google Colab** 
+- **VS Code** (jika menggunakan local environment)
+- **Git** (mengelola versi kode)
+
+---
 
 ## Setup Virtual Environment
 
-Sebelum menjalankan proyek, pastikan kamu sudah mengatur virtual environment dan menginstal semua dependensi yang dibutuhkan.
+### **1. Run Streamlit**
+run pada cmd komputer --> streamlit run project.py
 
-### Menggunakan Virtual Environment (venv)
-```bash
-python -m venv venv
-source venv/bin/activate  # Untuk Linux/Mac
-venv\Scripts\activate     # Untuk Windows
-pip install -r requirements.txt
+### **2. Jika menggunakan Google Colab**
+Tidak perlu membuat virtual environment secara manual. Cukup jalankan perintah berikut di Google Colab setelah mengunggah dataset:
+
+```python
+!pip install -r requirements.txt
+
 
