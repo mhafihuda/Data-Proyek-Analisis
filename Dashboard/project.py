@@ -5,27 +5,31 @@ import seaborn as sns
 
 @st.cache_data
 def load_data():
-     df = pd.read_csv("Dashboard/day.csv")
-     df["dteday"] = pd.to_datetime(df["dteday"])  # Konversi tanggal
-     return df
+    df = pd.read_csv("Dashboard/day.csv")
+    df["dteday"] = pd.to_datetime(df["dteday"])  # Konversi tanggal
+    df["season_label"] = df["season"].map({1: "Musim Semi", 2: "Musim Panas", 3: "Musim Gugur", 4: "Musim Dingin"})
+    df["weathersit_label"] = df["weathersit"].map({1: "Cerah", 2: "Mendung", 3: "Hujan", 4: "Salju"})
+    return df
 
 df = load_data()
 
 # Sidebar Filter
 st.sidebar.header("Filter Data")
-selected_season = st.sidebar.selectbox("Musim", df["season"].unique())
-selected_weathersit = st.sidebar.selectbox("Kondisi Cuaca", df["weathersit"].unique())
+seasons = ["All"] + list(df["season_label"].unique())
+weather = ["All"] + list(df["weathersit_label"].unique())
 
-# Rentang tanggal
+selected_season = st.sidebar.selectbox("Musim", seasons)
+selected_weathersit = st.sidebar.selectbox("Kondisi Cuaca", weather)
+
 start_date = st.sidebar.date_input("Tanggal Mulai", df["dteday"].min())
 end_date = st.sidebar.date_input("Tanggal Akhir", df["dteday"].max())
 
-df_filtered = df[
-    (df["season"] == selected_season) &
-    (df["weathersit"] == selected_weathersit) &
-    (df["dteday"] >= pd.to_datetime(start_date)) &
-    (df["dteday"] <= pd.to_datetime(end_date))
-]
+# Filter Data
+df_filtered = df[(df["dteday"] >= pd.to_datetime(start_date)) & (df["dteday"] <= pd.to_datetime(end_date))]
+if selected_season != "All":
+    df_filtered = df_filtered[df_filtered["season_label"] == selected_season]
+if selected_weathersit != "All":
+    df_filtered = df_filtered[df_filtered["weathersit_label"] == selected_weathersit]
 
 st.title("Dashboard Analisis Peminjaman Sepeda")
 
@@ -41,7 +45,7 @@ st.pyplot(fig)
 # Visualisasi 2: Distribusi Peminjaman Sepeda
 st.subheader("Distribusi Peminjaman Sepeda")
 fig, ax = plt.subplots(figsize=(10, 5))
-sns.histplot(df_filtered["cnt"], bins=20, kde=True, color="skyblue", edgecolor="black")
+sns.histplot(df_filtered["cnt"], bins=20, kde=True, color="blue", edgecolor="black")
 ax.set_xlabel("Jumlah Peminjaman")
 ax.set_ylabel("Frekuensi")
 ax.set_title("Histogram Peminjaman Sepeda")
@@ -49,37 +53,36 @@ st.pyplot(fig)
 
 # Visualisasi 3: Pengaruh Musim terhadap Peminjaman
 st.subheader("Peminjaman Sepeda Berdasarkan Musim")
-df_season = df.groupby("season")["cnt"].mean().reset_index()
+df_season = df.groupby("season_label")["cnt"].mean().reset_index()
 fig, ax = plt.subplots(figsize=(8, 5))
-sns.barplot(x="season", y="cnt", data=df_season, palette="coolwarm")
+sns.barplot(x="season_label", y="cnt", data=df_season, color="steelblue")
 ax.set_xlabel("Musim")
 ax.set_ylabel("Rata-rata Peminjaman")
 ax.set_title("Pengaruh Musim terhadap Peminjaman Sepeda")
+st.pyplot(fig)
+
+# Visualisasi 4: Faktor yang Mempengaruhi Peminjaman
+st.subheader("Faktor yang Mempengaruhi Peminjaman Sepeda")
+fig, ax = plt.subplots(figsize=(10, 5))
+sns.heatmap(df[["temp", "atemp", "hum", "windspeed", "cnt"]].corr(), annot=True, cmap="Blues", linewidths=0.5)
+ax.set_title("Korelasi Faktor Lingkungan dengan Jumlah Peminjaman")
 st.pyplot(fig)
 
 # Conclusion
 st.subheader("Kesimpulan 📊")
 st.write("""
 ### Variasi Penyewaan Berdasarkan Musim  
-- Musim gugur menunjukkan tingkat penyewaan sepeda tertinggi, sementara musim semi memiliki penyewaan terendah.  
-- Cuaca lebih stabil dan nyaman di musim gugur, sementara musim semi cenderung lebih lembap dan hujan.  
+- Musim gugur memiliki tingkat penyewaan tertinggi, sedangkan musim semi paling rendah.  
+- Faktor cuaca juga berperan signifikan dalam mempengaruhi jumlah peminjaman sepeda.  
 
-### Dampak Cuaca terhadap Penyewaan  
-- Saat cuaca cerah atau sedikit berawan (**weathersit=1**), jumlah pengguna meningkat.  
-- Cuaca buruk (**weathersit=3 atau lebih**) seperti hujan deras atau salju menyebabkan penurunan tajam dalam penyewaan.  
+### Faktor yang Mempengaruhi Penyewaan  
+- Temperatur yang lebih tinggi cenderung meningkatkan jumlah peminjaman.  
+- Kelembaban dan kecepatan angin yang tinggi cenderung menurunkan jumlah peminjaman.  
 
-### Pengaruh Faktor Lingkungan  
-- Temperatur yang terlalu rendah atau terlalu tinggi mengurangi minat penyewaan sepeda.  
-- Kelembaban tinggi juga berdampak pada penurunan jumlah penyewa.  
-
-### Perbedaan Pola Penggunaan di Hari Kerja dan Akhir Pekan  
-- Hari kerja menunjukkan pola penyewaan yang stabil karena digunakan untuk transportasi.  
-- Akhir pekan memiliki variasi lebih besar, dipengaruhi oleh faktor cuaca dan musim.  
-
-## Rekomendasi  
-1️⃣ **Ketersediaan Sepeda**: Menambah jumlah sepeda di musim gugur dan akhir pekan, serta melakukan pemeliharaan ekstra di musim semi.  
-2️⃣ **Peningkatan Penggunaan**: Menawarkan promo di hari-hari dengan cuaca buruk dan mengintegrasikan notifikasi cuaca di aplikasi penyewaan.  
-3️⃣ **Pengembangan Infrastruktur**: Menyediakan tempat berteduh di sekitar stasiun sepeda dan meningkatkan keamanan jalur sepeda di musim dingin.  
+### Rekomendasi  
+1️⃣ **Penyesuaian Jumlah Sepeda**: Tambah unit di musim gugur, dan siapkan pemeliharaan ekstra saat musim semi.  
+2️⃣ **Promosi Musiman**: Diskon atau promo saat kondisi cuaca kurang mendukung untuk mendorong penggunaan.  
+3️⃣ **Infrastruktur Ramah Cuaca**: Penyediaan tempat berteduh dan peningkatan keamanan jalur sepeda di musim dingin.  
 """)
 
-st.write("Filter di sidebar digunakan untuk menyesuaikan tampilan.")
+st.write("Gunakan filter di sidebar untuk menyesuaikan tampilan.")
