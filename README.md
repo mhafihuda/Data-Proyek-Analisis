@@ -14,7 +14,7 @@ Sebelum memulai proyek, pastikan kamu sudah memiliki:
 ## Setup Virtual Environment
 
 ### **1. Run Streamlit**
-run pada cmd komputer --> streamlit run project.py
+run pada cmd komputer --> streamlit run Dashboard/project.py
 
 ### **2. Jika menggunakan Google Colab**
 Tidak perlu membuat virtual environment secara manual. Cukup jalankan perintah berikut di Google Colab setelah mengunggah dataset:
